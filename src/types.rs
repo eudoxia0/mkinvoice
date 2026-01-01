@@ -129,11 +129,7 @@ mod tests {
         }
     }
 
-    fn create_test_invoice(
-        labour: Vec<Labour>,
-        expenses: Vec<Expense>,
-        tax_rate: f64,
-    ) -> Invoice {
+    fn create_test_invoice(labour: Vec<Labour>, expenses: Vec<Expense>, tax_rate: f64) -> Invoice {
         Invoice {
             metadata: Metadata {
                 invoice_id: "TEST-001".to_string(),
@@ -222,10 +218,7 @@ mod tests {
     /// Test Invoice::subtotal() with labour items only (500 + 150 = 650)
     #[test]
     fn test_invoice_subtotal_labour_only() {
-        let labour = vec![
-            create_test_labour(100.0, 5),
-            create_test_labour(75.0, 2),
-        ];
+        let labour = vec![create_test_labour(100.0, 5), create_test_labour(75.0, 2)];
         let invoice = create_test_invoice(labour, vec![], 10.0);
         assert_eq!(invoice.subtotal(), 650.0); // 500 + 150
     }
@@ -233,10 +226,7 @@ mod tests {
     /// Test Invoice::subtotal() with expense items only (100 + 100 = 200)
     #[test]
     fn test_invoice_subtotal_expenses_only() {
-        let expenses = vec![
-            create_test_expense(25.0, 4),
-            create_test_expense(50.0, 2),
-        ];
+        let expenses = vec![create_test_expense(25.0, 4), create_test_expense(50.0, 2)];
         let invoice = create_test_invoice(vec![], expenses, 10.0);
         assert_eq!(invoice.subtotal(), 200.0); // 100 + 100
     }
@@ -334,14 +324,8 @@ mod tests {
     /// Test Invoice::total() with complex invoice containing multiple items and 15% tax
     #[test]
     fn test_invoice_total_complex() {
-        let labour = vec![
-            create_test_labour(100.0, 5),
-            create_test_labour(75.50, 4),
-        ];
-        let expenses = vec![
-            create_test_expense(25.0, 6),
-            create_test_expense(50.25, 2),
-        ];
+        let labour = vec![create_test_labour(100.0, 5), create_test_labour(75.50, 4)];
+        let expenses = vec![create_test_expense(25.0, 6), create_test_expense(50.25, 2)];
         let invoice = create_test_invoice(labour, expenses, 15.0);
         // Subtotal: (500 + 302) + (150 + 100.5) = 1052.5
         // Tax: 1052.5 * 0.15 = 157.875
