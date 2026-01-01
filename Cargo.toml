@@ -12,3 +12,9 @@ categories = ["command-line-utilities"]
 serde = { version = "1.0.228", features = ["derive"] }
 toml = "0.9.10"
 chrono = { version = "0.4", features = ["serde"] }
+
+[profile.release]
+strip = "symbols"
+lto = true
+codegen-units = 1
+panic = "abort"
