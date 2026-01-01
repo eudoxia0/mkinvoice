@@ -173,14 +173,14 @@ mod tests {
         assert_eq!(labour.total(), 226.5);
     }
 
-    /// Test Labour::total() with zero quantity edge case
+    /// Test Labour::total() with zero quantity edge case.
     #[test]
     fn test_labour_total_zero_quantity() {
         let labour = create_test_labour(100.0, 0);
         assert_eq!(labour.total(), 0.0);
     }
 
-    /// Test Labour::total() with single quantity
+    /// Test Labour::total() with single quantity.
     #[test]
     fn test_labour_total_single_quantity() {
         let labour = create_test_labour(123.45, 1);
