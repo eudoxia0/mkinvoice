@@ -219,6 +219,7 @@ mod tests {
         assert_eq!(expense.total(), 0.0);
     }
 
+    /// Test Invoice::subtotal() with labour items only (500 + 150 = 650)
     #[test]
     fn test_invoice_subtotal_labour_only() {
         let labour = vec![
@@ -229,6 +230,7 @@ mod tests {
         assert_eq!(invoice.subtotal(), 650.0); // 500 + 150
     }
 
+    /// Test Invoice::subtotal() with expense items only (100 + 100 = 200)
     #[test]
     fn test_invoice_subtotal_expenses_only() {
         let expenses = vec![
@@ -239,6 +241,7 @@ mod tests {
         assert_eq!(invoice.subtotal(), 200.0); // 100 + 100
     }
 
+    /// Test Invoice::subtotal() with combined labour and expenses (500 + 100 = 600)
     #[test]
     fn test_invoice_subtotal_labour_and_expenses() {
         let labour = vec![create_test_labour(100.0, 5)];
@@ -247,12 +250,14 @@ mod tests {
         assert_eq!(invoice.subtotal(), 600.0); // 500 + 100
     }
 
+    /// Test Invoice::subtotal() with empty invoice
     #[test]
     fn test_invoice_subtotal_empty() {
         let invoice = create_test_invoice(vec![], vec![], 10.0);
         assert_eq!(invoice.subtotal(), 0.0);
     }
 
+    /// Test Invoice::subtotal() with multiple items of both types
     #[test]
     fn test_invoice_subtotal_multiple_items() {
         let labour = vec![
@@ -269,6 +274,7 @@ mod tests {
         assert_eq!(invoice.subtotal(), 1370.0); // (500 + 150 + 500) + (100 + 90 + 30)
     }
 
+    /// Test Invoice::tax_amount() with standard 10% tax rate (10% of 1000 = 100)
     #[test]
     fn test_invoice_tax_amount_ten_percent() {
         let labour = vec![create_test_labour(100.0, 10)];
@@ -276,6 +282,7 @@ mod tests {
         assert_eq!(invoice.tax_amount(), 100.0); // 10% of 1000
     }
 
+    /// Test Invoice::tax_amount() with 20% tax rate (20% of 1000 = 200)
     #[test]
     fn test_invoice_tax_amount_twenty_percent() {
         let labour = vec![create_test_labour(100.0, 10)];
@@ -283,6 +290,7 @@ mod tests {
         assert_eq!(invoice.tax_amount(), 200.0); // 20% of 1000
     }
 
+    /// Test Invoice::tax_amount() with zero tax rate
     #[test]
     fn test_invoice_tax_amount_zero_rate() {
         let labour = vec![create_test_labour(100.0, 10)];
@@ -290,6 +298,7 @@ mod tests {
         assert_eq!(invoice.tax_amount(), 0.0);
     }
 
+    /// Test Invoice::tax_amount() with fractional tax rate (7.5% of 1000 = 75)
     #[test]
     fn test_invoice_tax_amount_fractional_rate() {
         let labour = vec![create_test_labour(100.0, 10)];
@@ -297,6 +306,7 @@ mod tests {
         assert_eq!(invoice.tax_amount(), 75.0); // 7.5% of 1000
     }
 
+    /// Test Invoice::tax_amount() with decimal subtotal using floating-point tolerance
     #[test]
     fn test_invoice_tax_amount_with_decimal_subtotal() {
         let labour = vec![create_test_labour(33.33, 3)];
@@ -305,6 +315,7 @@ mod tests {
         assert!((invoice.tax_amount() - expected_tax).abs() < 0.001);
     }
 
+    /// Test Invoice::total() with simple total and 10% tax (1000 + 100 = 1100)
     #[test]
     fn test_invoice_total_simple() {
         let labour = vec![create_test_labour(100.0, 10)];
@@ -312,6 +323,7 @@ mod tests {
         assert_eq!(invoice.total(), 1100.0); // 1000 subtotal + 100 tax
     }
 
+    /// Test Invoice::total() with zero tax rate
     #[test]
     fn test_invoice_total_zero_tax() {
         let labour = vec![create_test_labour(100.0, 10)];
@@ -319,6 +331,7 @@ mod tests {
         assert_eq!(invoice.total(), 1000.0);
     }
 
+    /// Test Invoice::total() with complex invoice containing multiple items and 15% tax
     #[test]
     fn test_invoice_total_complex() {
         let labour = vec![
@@ -338,12 +351,14 @@ mod tests {
         assert_eq!(invoice.total(), 1210.375);
     }
 
+    /// Test Invoice::total() with empty invoice
     #[test]
     fn test_invoice_total_empty_invoice() {
         let invoice = create_test_invoice(vec![], vec![], 10.0);
         assert_eq!(invoice.total(), 0.0);
     }
 
+    /// Test Invoice::total() with high tax rate (25% of 1000 = 250, total = 1250)
     #[test]
     fn test_invoice_total_high_tax_rate() {
         let labour = vec![create_test_labour(100.0, 10)];
