@@ -25,12 +25,9 @@ use types::Invoice;
 #[command(name = "mkinvoice")]
 #[command(about = "Generate PDF invoices from TOML files", long_about = None)]
 struct Args {
-    /// Path to the input TOML file containing invoice data
-    #[arg(value_name = "FILE")]
+    /// Path to the input TOML file containing invoice data.
     input: PathBuf,
-
-    /// Path to the output PDF file
-    #[arg(value_name = "FILE")]
+    /// Path to the output PDF file.
     output: PathBuf,
 }
 
