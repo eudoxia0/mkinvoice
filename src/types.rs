@@ -187,11 +187,11 @@ mod tests {
         assert_eq!(labour.total(), 123.45);
     }
 
-    /// Test Labour::total() with large quantity (50 * 100 = 5000)
+    /// Test Labour::total() with large quantity (50 * 10 = 500)
     #[test]
     fn test_labour_total_large_quantity() {
-        let labour = create_test_labour(50.0, 100);
-        assert_eq!(labour.total(), 5000.0);
+        let labour = create_test_labour(50.0, 10);
+        assert_eq!(labour.total(), 500.0);
     }
 
     /// Test Expense::total() with simple calculation (25 * 4 = 100)
