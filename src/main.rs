@@ -43,7 +43,5 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     // Generate the PDF
     render::generate_pdf(&invoice, &args.output)?;
 
-    println!("Invoice generated successfully: {}", args.output.display());
-
     Ok(())
 }
