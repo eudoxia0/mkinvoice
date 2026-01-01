@@ -106,3 +106,240 @@ impl Invoice {
         self.subtotal() + self.tax_amount()
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    fn create_test_labour(unit_price: f64, quantity: u32) -> Labour {
+        Labour {
+            date: NaiveDate::from_ymd_opt(2026, 1, 1).unwrap(),
+            description: "Test labour".to_string(),
+            unit_price,
+            quantity,
+        }
+    }
+
+    fn create_test_expense(unit_price: f64, quantity: u32) -> Expense {
+        Expense {
+            date: NaiveDate::from_ymd_opt(2026, 1, 1).unwrap(),
+            description: "Test expense".to_string(),
+            unit_price,
+            quantity,
+        }
+    }
+
+    fn create_test_invoice(
+        labour: Vec<Labour>,
+        expenses: Vec<Expense>,
+        tax_rate: f64,
+    ) -> Invoice {
+        Invoice {
+            metadata: Metadata {
+                invoice_id: "TEST-001".to_string(),
+                issue_date: NaiveDate::from_ymd_opt(2026, 1, 1).unwrap(),
+                payment_terms: "Net 30".to_string(),
+                tax_rate,
+                currency: "USD".to_string(),
+            },
+            issuer: Issuer {
+                name: "Test Issuer".to_string(),
+                email: "issuer@test.com".to_string(),
+            },
+            recipient: Recipient {
+                name: "Test Recipient".to_string(),
+                company: "Test Company".to_string(),
+                email: "recipient@test.com".to_string(),
+            },
+            labour,
+            expenses,
+            payment: Payment {
+                name: "Test Account".to_string(),
+                bsb: "123-456".to_string(),
+                acct: "12345678".to_string(),
+                bank: "Test Bank".to_string(),
+                swift: "TESTSWIFT".to_string(),
+            },
+        }
+    }
+
+    #[test]
+    fn test_labour_total_simple() {
+        let labour = create_test_labour(100.0, 5);
+        assert_eq!(labour.total(), 500.0);
+    }
+
+    #[test]
+    fn test_labour_total_with_decimals() {
+        let labour = create_test_labour(75.50, 3);
+        assert_eq!(labour.total(), 226.5);
+    }
+
+    #[test]
+    fn test_labour_total_zero_quantity() {
+        let labour = create_test_labour(100.0, 0);
+        assert_eq!(labour.total(), 0.0);
+    }
+
+    #[test]
+    fn test_labour_total_single_quantity() {
+        let labour = create_test_labour(123.45, 1);
+        assert_eq!(labour.total(), 123.45);
+    }
+
+    #[test]
+    fn test_labour_total_large_quantity() {
+        let labour = create_test_labour(50.0, 100);
+        assert_eq!(labour.total(), 5000.0);
+    }
+
+    #[test]
+    fn test_expense_total_simple() {
+        let expense = create_test_expense(25.0, 4);
+        assert_eq!(expense.total(), 100.0);
+    }
+
+    #[test]
+    fn test_expense_total_with_decimals() {
+        let expense = create_test_expense(12.99, 7);
+        assert_eq!(expense.total(), 90.93);
+    }
+
+    #[test]
+    fn test_expense_total_zero_quantity() {
+        let expense = create_test_expense(50.0, 0);
+        assert_eq!(expense.total(), 0.0);
+    }
+
+    #[test]
+    fn test_invoice_subtotal_labour_only() {
+        let labour = vec![
+            create_test_labour(100.0, 5),
+            create_test_labour(75.0, 2),
+        ];
+        let invoice = create_test_invoice(labour, vec![], 10.0);
+        assert_eq!(invoice.subtotal(), 650.0); // 500 + 150
+    }
+
+    #[test]
+    fn test_invoice_subtotal_expenses_only() {
+        let expenses = vec![
+            create_test_expense(25.0, 4),
+            create_test_expense(50.0, 2),
+        ];
+        let invoice = create_test_invoice(vec![], expenses, 10.0);
+        assert_eq!(invoice.subtotal(), 200.0); // 100 + 100
+    }
+
+    #[test]
+    fn test_invoice_subtotal_labour_and_expenses() {
+        let labour = vec![create_test_labour(100.0, 5)];
+        let expenses = vec![create_test_expense(25.0, 4)];
+        let invoice = create_test_invoice(labour, expenses, 10.0);
+        assert_eq!(invoice.subtotal(), 600.0); // 500 + 100
+    }
+
+    #[test]
+    fn test_invoice_subtotal_empty() {
+        let invoice = create_test_invoice(vec![], vec![], 10.0);
+        assert_eq!(invoice.subtotal(), 0.0);
+    }
+
+    #[test]
+    fn test_invoice_subtotal_multiple_items() {
+        let labour = vec![
+            create_test_labour(100.0, 5),
+            create_test_labour(75.0, 2),
+            create_test_labour(50.0, 10),
+        ];
+        let expenses = vec![
+            create_test_expense(25.0, 4),
+            create_test_expense(30.0, 3),
+            create_test_expense(15.0, 2),
+        ];
+        let invoice = create_test_invoice(labour, expenses, 10.0);
+        assert_eq!(invoice.subtotal(), 1370.0); // (500 + 150 + 500) + (100 + 90 + 30)
+    }
+
+    #[test]
+    fn test_invoice_tax_amount_ten_percent() {
+        let labour = vec![create_test_labour(100.0, 10)];
+        let invoice = create_test_invoice(labour, vec![], 10.0);
+        assert_eq!(invoice.tax_amount(), 100.0); // 10% of 1000
+    }
+
+    #[test]
+    fn test_invoice_tax_amount_twenty_percent() {
+        let labour = vec![create_test_labour(100.0, 10)];
+        let invoice = create_test_invoice(labour, vec![], 20.0);
+        assert_eq!(invoice.tax_amount(), 200.0); // 20% of 1000
+    }
+
+    #[test]
+    fn test_invoice_tax_amount_zero_rate() {
+        let labour = vec![create_test_labour(100.0, 10)];
+        let invoice = create_test_invoice(labour, vec![], 0.0);
+        assert_eq!(invoice.tax_amount(), 0.0);
+    }
+
+    #[test]
+    fn test_invoice_tax_amount_fractional_rate() {
+        let labour = vec![create_test_labour(100.0, 10)];
+        let invoice = create_test_invoice(labour, vec![], 7.5);
+        assert_eq!(invoice.tax_amount(), 75.0); // 7.5% of 1000
+    }
+
+    #[test]
+    fn test_invoice_tax_amount_with_decimal_subtotal() {
+        let labour = vec![create_test_labour(33.33, 3)];
+        let invoice = create_test_invoice(labour, vec![], 10.0);
+        let expected_tax = 99.99 * 0.10;
+        assert!((invoice.tax_amount() - expected_tax).abs() < 0.001);
+    }
+
+    #[test]
+    fn test_invoice_total_simple() {
+        let labour = vec![create_test_labour(100.0, 10)];
+        let invoice = create_test_invoice(labour, vec![], 10.0);
+        assert_eq!(invoice.total(), 1100.0); // 1000 subtotal + 100 tax
+    }
+
+    #[test]
+    fn test_invoice_total_zero_tax() {
+        let labour = vec![create_test_labour(100.0, 10)];
+        let invoice = create_test_invoice(labour, vec![], 0.0);
+        assert_eq!(invoice.total(), 1000.0);
+    }
+
+    #[test]
+    fn test_invoice_total_complex() {
+        let labour = vec![
+            create_test_labour(100.0, 5),
+            create_test_labour(75.50, 4),
+        ];
+        let expenses = vec![
+            create_test_expense(25.0, 6),
+            create_test_expense(50.25, 2),
+        ];
+        let invoice = create_test_invoice(labour, expenses, 15.0);
+        // Subtotal: (500 + 302) + (150 + 100.5) = 1052.5
+        // Tax: 1052.5 * 0.15 = 157.875
+        // Total: 1052.5 + 157.875 = 1210.375
+        assert_eq!(invoice.subtotal(), 1052.5);
+        assert_eq!(invoice.tax_amount(), 157.875);
+        assert_eq!(invoice.total(), 1210.375);
+    }
+
+    #[test]
+    fn test_invoice_total_empty_invoice() {
+        let invoice = create_test_invoice(vec![], vec![], 10.0);
+        assert_eq!(invoice.total(), 0.0);
+    }
+
+    #[test]
+    fn test_invoice_total_high_tax_rate() {
+        let labour = vec![create_test_labour(100.0, 10)];
+        let invoice = create_test_invoice(labour, vec![], 25.0);
+        assert_eq!(invoice.total(), 1250.0); // 1000 + 250
+    }
+}
