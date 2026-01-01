@@ -240,14 +240,14 @@ mod tests {
         assert_eq!(invoice.subtotal(), 600.0); // 500 + 100
     }
 
-    /// Test Invoice::subtotal() with empty invoice
+    /// Test Invoice::subtotal() with empty invoice.
     #[test]
     fn test_invoice_subtotal_empty() {
         let invoice = create_test_invoice(vec![], vec![], 10.0);
         assert_eq!(invoice.subtotal(), 0.0);
     }
 
-    /// Test Invoice::subtotal() with multiple items of both types
+    /// Test Invoice::subtotal() with multiple items of both types.
     #[test]
     fn test_invoice_subtotal_multiple_items() {
         let labour = vec![
@@ -313,7 +313,7 @@ mod tests {
         assert_eq!(invoice.total(), 1100.0); // 1000 subtotal + 100 tax
     }
 
-    /// Test Invoice::total() with zero tax rate
+    /// Test Invoice::total() with zero tax rate.
     #[test]
     fn test_invoice_total_zero_tax() {
         let labour = vec![create_test_labour(100.0, 10)];
@@ -335,7 +335,7 @@ mod tests {
         assert_eq!(invoice.total(), 1210.375);
     }
 
-    /// Test Invoice::total() with empty invoice
+    /// Test Invoice::total() with empty invoice.
     #[test]
     fn test_invoice_total_empty_invoice() {
         let invoice = create_test_invoice(vec![], vec![], 10.0);
