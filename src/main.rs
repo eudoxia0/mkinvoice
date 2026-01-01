@@ -26,11 +26,11 @@ use types::Invoice;
 #[command(about = "Generate PDF invoices from TOML files", long_about = None)]
 struct Args {
     /// Path to the input TOML file containing invoice data
-    #[arg(short, long, value_name = "FILE")]
+    #[arg(value_name = "FILE")]
     input: PathBuf,
 
     /// Path to the output PDF file
-    #[arg(short, long, value_name = "FILE")]
+    #[arg(value_name = "FILE")]
     output: PathBuf,
 }
 
