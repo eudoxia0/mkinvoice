@@ -221,7 +221,7 @@ fn render_expense_row(item: &Expense, currency: &str) -> Markup {
 }
 
 fn format_currency(currency: &str, amount: f64) -> String {
-    format!("{:.2} {}", mount, currency)
+    format!("{:.2} {}", amount, currency)
 }
 
 /// Generate a PDF from an invoice.
