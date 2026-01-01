@@ -41,7 +41,7 @@ quantity    = 1
 [[expenses]]
 date        = "2052-06-28"
 description = "A new liver"
-price       = 2500.0
+unit_price  = 2500.0
 quantity    = 1
 
 [payment]
