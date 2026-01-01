@@ -172,12 +172,20 @@ pub fn render_html(invoice: &Invoice) -> Markup {
                                     td class="val" { (invoice.payment.name) }
                                 }
                                 tr {
+                                    td class="key" { "bsb" }
+                                    td class="val" { (invoice.payment.bsb) }
+                                }
+                                tr {
                                     td class="key" { "acct" }
                                     td class="val" { (invoice.payment.acct) }
                                 }
                                 tr {
                                     td class="key" { "bank" }
                                     td class="val" { (invoice.payment.bank) }
+                                }
+                                tr {
+                                    td class="key" { "bic/swift" }
+                                    td class="val" { (invoice.payment.swift) }
                                 }
                             }
                         }
