@@ -208,7 +208,7 @@ mod tests {
         assert_eq!(expense.total(), 90.93);
     }
 
-    /// Test Expense::total() with zero quantity edge case
+    /// Test Expense::total() with zero quantity edge case.
     #[test]
     fn test_expense_total_zero_quantity() {
         let expense = create_test_expense(50.0, 0);
