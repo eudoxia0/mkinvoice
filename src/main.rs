@@ -15,6 +15,37 @@
 mod render;
 mod types;
 
-fn main() {
-    println!("Hello, world!");
+use clap::Parser;
+use std::path::PathBuf;
+use types::Invoice;
+
+/// A script to create PDF invoices from TOML files.
+#[derive(Parser, Debug)]
+#[command(name = "mkinvoice")]
+#[command(about = "Generate PDF invoices from TOML files", long_about = None)]
+struct Args {
+    /// Path to the input TOML file containing invoice data
+    #[arg(short, long, value_name = "FILE")]
+    input: PathBuf,
+
+    /// Path to the output PDF file
+    #[arg(short, long, value_name = "FILE")]
+    output: PathBuf,
+}
+
+fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let args = Args::parse();
+
+    // Read the TOML file
+    let toml_content = std::fs::read_to_string(&args.input)?;
+
+    // Parse the invoice
+    let invoice: Invoice = toml::from_str(&toml_content)?;
+
+    // Generate the PDF
+    render::generate_pdf(&invoice, &args.output)?;
+
+    println!("Invoice generated successfully: {}", args.output.display());
+
+    Ok(())
 }
