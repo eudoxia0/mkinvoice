@@ -11,7 +11,9 @@ headless Chromium's print-to-PDF function.
 
 ## Usage
 
-See the `example/` directory for an example `invoice.toml`.
+See the `example/` directory for an example [`invoice.toml`][invoice].
+
+[invoice]: https://github.com/eudoxia0/mkinvoice/blob/master/example/invoice.toml
 
 ```
 $ mkinvoice invoice.toml invoice.pdf
