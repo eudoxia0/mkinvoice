@@ -3,6 +3,10 @@ name = "mkinvoice"
 version = "0.1.0"
 edition = "2024"
 license = "Apache-2.0"
+description = "A script to create PDF invoices from TOML files."
+homepage = "https://github.com/eudoxia0/mkinvoice"
+repository = "https://github.com/eudoxia0/mkinvoice"
+categories = ["command-line-utilities"]
 
 [dependencies]
 serde = { version = "1.0.228", features = ["derive"] }
