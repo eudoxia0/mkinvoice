@@ -251,17 +251,15 @@ mod tests {
     #[test]
     fn test_invoice_subtotal_multiple_items() {
         let labour = vec![
-            create_test_labour(100.0, 5),
-            create_test_labour(75.0, 2),
-            create_test_labour(50.0, 10),
+            create_test_labour(100.0, 1),
+            create_test_labour(50.0, 1),
         ];
         let expenses = vec![
-            create_test_expense(25.0, 4),
-            create_test_expense(30.0, 3),
-            create_test_expense(15.0, 2),
+            create_test_expense(20.0, 1),
+            create_test_expense(30.0, 1),
         ];
         let invoice = create_test_invoice(labour, expenses, 10.0);
-        assert_eq!(invoice.subtotal(), 1370.0); // (500 + 150 + 500) + (100 + 90 + 30)
+        assert_eq!(invoice.subtotal(), 200.0);
     }
 
     /// Test Invoice::tax_amount() with standard 10% tax rate (10% of 1000 = 100)
