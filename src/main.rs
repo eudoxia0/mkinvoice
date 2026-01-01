@@ -15,8 +15,9 @@
 mod render;
 mod types;
 
-use clap::Parser;
 use std::path::PathBuf;
+
+use clap::Parser;
 use types::Invoice;
 
 /// A script to create PDF invoices from TOML files.
