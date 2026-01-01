@@ -250,14 +250,8 @@ mod tests {
     /// Test Invoice::subtotal() with multiple items of both types.
     #[test]
     fn test_invoice_subtotal_multiple_items() {
-        let labour = vec![
-            create_test_labour(100.0, 1),
-            create_test_labour(50.0, 1),
-        ];
-        let expenses = vec![
-            create_test_expense(20.0, 1),
-            create_test_expense(30.0, 1),
-        ];
+        let labour = vec![create_test_labour(100.0, 1), create_test_labour(50.0, 1)];
+        let expenses = vec![create_test_expense(20.0, 1), create_test_expense(30.0, 1)];
         let invoice = create_test_invoice(labour, expenses, 10.0);
         assert_eq!(invoice.subtotal(), 200.0);
     }
