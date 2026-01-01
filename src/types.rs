@@ -163,48 +163,56 @@ mod tests {
         }
     }
 
+    /// Test Labour::total() with simple integer values (100 * 5 = 500)
     #[test]
     fn test_labour_total_simple() {
         let labour = create_test_labour(100.0, 5);
         assert_eq!(labour.total(), 500.0);
     }
 
+    /// Test Labour::total() with decimal prices (75.50 * 3 = 226.5)
     #[test]
     fn test_labour_total_with_decimals() {
         let labour = create_test_labour(75.50, 3);
         assert_eq!(labour.total(), 226.5);
     }
 
+    /// Test Labour::total() with zero quantity edge case
     #[test]
     fn test_labour_total_zero_quantity() {
         let labour = create_test_labour(100.0, 0);
         assert_eq!(labour.total(), 0.0);
     }
 
+    /// Test Labour::total() with single quantity
     #[test]
     fn test_labour_total_single_quantity() {
         let labour = create_test_labour(123.45, 1);
         assert_eq!(labour.total(), 123.45);
     }
 
+    /// Test Labour::total() with large quantity (50 * 100 = 5000)
     #[test]
     fn test_labour_total_large_quantity() {
         let labour = create_test_labour(50.0, 100);
         assert_eq!(labour.total(), 5000.0);
     }
 
+    /// Test Expense::total() with simple calculation (25 * 4 = 100)
     #[test]
     fn test_expense_total_simple() {
         let expense = create_test_expense(25.0, 4);
         assert_eq!(expense.total(), 100.0);
     }
 
+    /// Test Expense::total() with decimal prices (12.99 * 7 = 90.93)
     #[test]
     fn test_expense_total_with_decimals() {
         let expense = create_test_expense(12.99, 7);
         assert_eq!(expense.total(), 90.93);
     }
 
+    /// Test Expense::total() with zero quantity edge case
     #[test]
     fn test_expense_total_zero_quantity() {
         let expense = create_test_expense(50.0, 0);
