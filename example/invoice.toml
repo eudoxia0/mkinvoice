@@ -8,6 +8,7 @@ currency      = "AUD"
 [issuer]
 name  = "Fernando Borretti"
 email = "fernando@borretti.me"
+abn = "123 456"
 
 [recipient]
 name    = "Wintermute"

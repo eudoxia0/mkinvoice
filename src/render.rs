@@ -74,6 +74,7 @@ pub fn render_html(invoice: &Invoice) -> Markup {
                                         (invoice.issuer.email)
                                     }
                                 }
+                                div class="line" { "ABN " (invoice.issuer.abn) }
                             }
                         }
                     }

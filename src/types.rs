@@ -39,6 +39,7 @@ pub struct Metadata {
 pub struct Issuer {
     pub name: String,
     pub email: String,
+    pub abn: String,
 }
 
 #[derive(Debug, Deserialize)]
@@ -141,6 +142,7 @@ mod tests {
             issuer: Issuer {
                 name: "Test Issuer".to_string(),
                 email: "issuer@test.com".to_string(),
+                abn: "123 456".to_string(),
             },
             recipient: Recipient {
                 name: "Test Recipient".to_string(),
