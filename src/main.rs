@@ -13,8 +13,9 @@
 // limitations under the License.
 
 mod error;
+mod html;
 mod invoice;
-mod render;
+mod pdf;
 
 use std::path::PathBuf;
 use std::process::ExitCode;
@@ -23,7 +24,7 @@ use clap::Parser;
 use invoice::Invoice;
 
 use crate::error::Fallible;
-use crate::render::generate_pdf;
+use crate::pdf::generate_pdf;
 
 /// A script to create PDF invoices from TOML files.
 #[derive(Parser, Debug)]
