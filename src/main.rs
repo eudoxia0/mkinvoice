@@ -20,6 +20,8 @@ use std::path::PathBuf;
 use clap::Parser;
 use types::Invoice;
 
+use crate::render::generate_pdf;
+
 /// A script to create PDF invoices from TOML files.
 #[derive(Parser, Debug)]
 #[command(name = "mkinvoice")]
@@ -33,15 +35,8 @@ struct Args {
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     let args = Args::parse();
-
-    // Read the TOML file
     let toml_content = std::fs::read_to_string(&args.input)?;
-
-    // Parse the invoice
     let invoice: Invoice = toml::from_str(&toml_content)?;
-
-    // Generate the PDF
-    render::generate_pdf(&invoice, &args.output)?;
-
+    generate_pdf(&invoice, &args.output)?;
     Ok(())
 }
