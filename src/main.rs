@@ -12,13 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+mod invoice;
 mod render;
-mod types;
 
 use std::path::PathBuf;
 
 use clap::Parser;
-use types::Invoice;
+use invoice::Invoice;
 
 use crate::render::generate_pdf;
 

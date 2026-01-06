@@ -21,9 +21,9 @@ use maud::PreEscaped;
 use maud::html;
 use tempfile::tempdir;
 
-use crate::types::Expense;
-use crate::types::Invoice;
-use crate::types::Labour;
+use crate::invoice::Expense;
+use crate::invoice::Invoice;
+use crate::invoice::Labour;
 
 const STYLESHEET: &str = include_str!("style.css");
 
