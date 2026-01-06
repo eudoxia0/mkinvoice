@@ -26,6 +26,7 @@ pub struct Invoice {
     pub payment: Payment,
 }
 
+/// Invoice metadata.
 #[derive(Debug, Deserialize)]
 pub struct Metadata {
     pub invoice_id: String,
@@ -35,6 +36,7 @@ pub struct Metadata {
     pub currency: String,
 }
 
+/// The invoice's issuer.
 #[derive(Debug, Deserialize)]
 pub struct Issuer {
     pub name: String,
@@ -42,6 +44,7 @@ pub struct Issuer {
     pub abn: String,
 }
 
+/// The invoice's recipient.
 #[derive(Debug, Deserialize)]
 pub struct Recipient {
     pub name: String,
@@ -49,6 +52,7 @@ pub struct Recipient {
     pub email: String,
 }
 
+/// An entry in the labour list.
 #[derive(Debug, Deserialize)]
 pub struct Labour {
     pub date: NaiveDate,
@@ -57,6 +61,7 @@ pub struct Labour {
     pub quantity: u32,
 }
 
+/// An entry in the expenses list.
 #[derive(Debug, Deserialize)]
 pub struct Expense {
     pub date: NaiveDate,
@@ -65,6 +70,7 @@ pub struct Expense {
     pub quantity: u32,
 }
 
+/// Payment information.
 #[derive(Debug, Deserialize)]
 pub struct Payment {
     pub name: String,
