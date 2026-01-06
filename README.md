@@ -20,9 +20,17 @@ $ mkinvoice invoice.toml invoice.pdf
 Here is an example invoice:
 
 ```toml
+[metadata]
+invoice_id    = "1729"
+issue_date    = "2052-06-30"
+payment_terms = "NET 30"
+tax_rate      = 10.0
+currency      = "AUD"
+
 [issuer]
 name  = "Fernando Borretti"
 email = "fernando@borretti.me"
+abn = "123 456"
 
 [recipient]
 name    = "Wintermute"
