@@ -21,6 +21,8 @@ use maud::PreEscaped;
 use maud::html;
 use tempfile::tempdir;
 
+use crate::error::Fallible;
+use crate::error::ScriptError;
 use crate::invoice::Expense;
 use crate::invoice::Invoice;
 use crate::invoice::Labour;
@@ -226,10 +228,7 @@ fn format_currency(currency: &str, amount: f64) -> String {
 }
 
 /// Generate a PDF from an invoice.
-pub fn generate_pdf(
-    invoice: &Invoice,
-    output_path: &Path,
-) -> Result<(), Box<dyn std::error::Error>> {
+pub fn generate_pdf(invoice: &Invoice, output_path: &Path) -> Fallible<()> {
     // Create temporary directory
     let dir = tempdir()?;
     let dir_path: PathBuf = dir.path().to_path_buf().canonicalize()?;
@@ -250,7 +249,7 @@ pub fn generate_pdf(
 
     if !output.status.success() {
         let stderr = String::from_utf8_lossy(&output.stderr);
-        return Err(format!("Chromium failed: {}", stderr).into());
+        return Err(ScriptError::new(format!("Chromium failed: {stderr}")));
     }
 
     Ok(())

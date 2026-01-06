@@ -12,8 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+use std::path::Path;
+
 use chrono::NaiveDate;
 use serde::Deserialize;
+
+use crate::error::Fallible;
 
 /// An invoice.
 #[derive(Debug, Deserialize)]
@@ -96,6 +100,13 @@ impl Expense {
 }
 
 impl Invoice {
+    /// Parse an invoice from the path to a TOML file.
+    pub fn parse(path: &Path) -> Fallible<Self> {
+        let toml_content: String = std::fs::read_to_string(path)?;
+        let invoice: Invoice = toml::from_str(&toml_content)?;
+        Ok(invoice)
+    }
+
     /// Calculate the subtotal: the total cost of all invoice items.
     pub fn subtotal(&self) -> f64 {
         let labour_total: f64 = self.labour.iter().map(|l| l.total()).sum();

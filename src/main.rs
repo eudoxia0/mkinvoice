@@ -12,14 +12,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+mod error;
 mod invoice;
 mod render;
 
 use std::path::PathBuf;
+use std::process::ExitCode;
 
 use clap::Parser;
 use invoice::Invoice;
 
+use crate::error::Fallible;
 use crate::render::generate_pdf;
 
 /// A script to create PDF invoices from TOML files.
@@ -33,10 +36,19 @@ struct Args {
     output: PathBuf,
 }
 
-fn main() -> Result<(), Box<dyn std::error::Error>> {
+fn entrypoint() -> Fallible<()> {
     let args = Args::parse();
-    let toml_content = std::fs::read_to_string(&args.input)?;
-    let invoice: Invoice = toml::from_str(&toml_content)?;
+    let invoice: Invoice = Invoice::parse(&args.input)?;
     generate_pdf(&invoice, &args.output)?;
     Ok(())
+}
+
+fn main() -> ExitCode {
+    match entrypoint() {
+        Ok(_) => ExitCode::SUCCESS,
+        Err(e) => {
+            eprintln!("{e}");
+            ExitCode::FAILURE
+        }
+    }
 }
