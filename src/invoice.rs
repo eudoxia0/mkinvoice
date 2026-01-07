@@ -25,7 +25,9 @@ pub struct Invoice {
     pub metadata: Metadata,
     pub issuer: Issuer,
     pub recipient: Recipient,
+    #[serde(default)]
     pub labour: Vec<Labour>,
+    #[serde(default)]
     pub expenses: Vec<Expense>,
     pub payment: Payment,
 }
@@ -104,6 +106,13 @@ impl Invoice {
     pub fn parse(path: &Path) -> Fallible<Self> {
         let toml_content: String = std::fs::read_to_string(path)?;
         let invoice: Invoice = toml::from_str(&toml_content)?;
+        Ok(invoice)
+    }
+
+    /// Parse an invoice from a string.
+    #[cfg(test)]
+    pub fn parse_string(text: &str) -> Fallible<Self> {
+        let invoice: Invoice = toml::from_str(text)?;
         Ok(invoice)
     }
 
@@ -359,5 +368,83 @@ mod tests {
         let labour = vec![create_test_labour(100.0, 10)];
         let invoice = create_test_invoice(labour, vec![], 25.0);
         assert_eq!(invoice.total(), 1250.0); // 1000 + 250
+    }
+
+    /// An invoice with no expenses is parsed correctly.
+    #[test]
+    fn test_parse_invoice_no_expenses() -> Fallible<()> {
+        let text = r#"
+            [metadata]
+            invoice_id    = "1729"
+            issue_date    = "2052-06-30"
+            payment_terms = "NET 30"
+            tax_rate      = 10.0
+            currency      = "AUD"
+
+            [issuer]
+            name  = "Fernando Borretti"
+            email = "fernando@borretti.me"
+            abn = "123 456"
+
+            [recipient]
+            name    = "Wintermute"
+            company = "Tessier-Ashpool S.A."
+            email   = "wmute@ta.sa"
+
+            [[labour]]
+            date        = "2052-06-03"
+            description = "Sense/Net (hacked)"
+            unit_price  = 300.0
+            quantity    = 4
+
+            [payment]
+            name  = "Fernando Borretti"
+            bsb   = "999-999"
+            acct  = "9999 9999"
+            bank  = "Crédit Nuage de Genève"
+            swift = "FOOBAR"
+        "#;
+        let res = Invoice::parse_string(text);
+        assert!(res.is_ok());
+        Ok(())
+    }
+
+    /// An invoice with no labour is parsed correctly.
+    #[test]
+    fn test_parse_invoice_no_labour() -> Fallible<()> {
+        let text = r#"
+            [metadata]
+            invoice_id    = "1729"
+            issue_date    = "2052-06-30"
+            payment_terms = "NET 30"
+            tax_rate      = 10.0
+            currency      = "AUD"
+
+            [issuer]
+            name  = "Fernando Borretti"
+            email = "fernando@borretti.me"
+            abn = "123 456"
+
+            [recipient]
+            name    = "Wintermute"
+            company = "Tessier-Ashpool S.A."
+            email   = "wmute@ta.sa"
+
+            [[expenses]]
+            date        = "2052-06-21"
+            description = "Flight to Freeside (steerage)"
+            unit_price  = 500.0
+            quantity    = 1
+
+            [payment]
+            name  = "Fernando Borretti"
+            bsb   = "999-999"
+            acct  = "9999 9999"
+            bank  = "Crédit Nuage de Genève"
+            swift = "FOOBAR"
+        "#;
+        let res = Invoice::parse_string(text);
+        assert!(res.is_ok());
+        Ok(())
     }
 }
