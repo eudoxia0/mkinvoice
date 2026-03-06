@@ -24,14 +24,14 @@ use crate::html::render_html;
 use crate::invoice::Invoice;
 
 /// Generate a PDF from an invoice.
-pub fn generate_pdf(invoice: &Invoice, output_path: &Path) -> Fallible<()> {
+pub fn generate_pdf(invoice: &Invoice, output_path: &Path, show_total_hours: bool) -> Fallible<()> {
     // Create temporary directory
     let dir = tempdir()?;
     let dir_path: PathBuf = dir.path().to_path_buf().canonicalize()?;
 
     // Write HTML to temporary file
     let html_path = dir_path.join("invoice.html");
-    let html = render_html(invoice).into_string();
+    let html = render_html(invoice, show_total_hours).into_string();
     std::fs::write(&html_path, html)?;
 
     // Run headless Chromium to generate PDF

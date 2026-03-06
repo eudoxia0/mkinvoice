@@ -132,6 +132,11 @@ impl Invoice {
     pub fn total(&self) -> f64 {
         self.subtotal() + self.tax_amount()
     }
+
+    /// Calculate the total labour hours (sum of quantity for all labour items).
+    pub fn total_labour_hours(&self) -> u32 {
+        self.labour.iter().map(|l| l.quantity).sum()
+    }
 }
 
 #[cfg(test)]

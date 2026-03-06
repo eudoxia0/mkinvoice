@@ -23,7 +23,7 @@ use crate::invoice::Labour;
 const STYLESHEET: &str = include_str!("style.css");
 
 /// Render an invoice to HTML.
-pub fn render_html(invoice: &Invoice) -> Markup {
+pub fn render_html(invoice: &Invoice, show_total_hours: bool) -> Markup {
     html! {
         (PreEscaped("<!doctype html>"))
         html lang="en" {
@@ -133,6 +133,14 @@ pub fn render_html(invoice: &Invoice) -> Markup {
                                         td class="total" colspan="4" { "Subtotal" }
                                         td class="numeric-cell" {
                                             (format_currency(&invoice.metadata.currency, invoice.subtotal()))
+                                        }
+                                    }
+                                    @if show_total_hours {
+                                        tr {
+                                            td class="total" colspan="4" { "Total Hours" }
+                                            td class="numeric-cell" {
+                                                (invoice.total_labour_hours())
+                                            }
                                         }
                                     }
                                     tr {

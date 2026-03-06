@@ -35,12 +35,15 @@ struct Args {
     input: PathBuf,
     /// Path to the output PDF file.
     output: PathBuf,
+    /// Show total labour hours in the invoice.
+    #[arg(long)]
+    show_total_hours: bool,
 }
 
 fn entrypoint() -> Fallible<()> {
     let args = Args::parse();
     let invoice: Invoice = Invoice::parse(&args.input)?;
-    generate_pdf(&invoice, &args.output)?;
+    generate_pdf(&invoice, &args.output, args.show_total_hours)?;
     Ok(())
 }
 
