@@ -191,6 +191,12 @@ pub fn render_html(invoice: &Invoice, show_total_hours: bool) -> Markup {
                                     td class="key" { "bic/swift" }
                                     td class="val" { (invoice.payment.swift) }
                                 }
+                                @if invoice.payment.address.is_some() {
+                                    tr {
+                                        td class="key" { "address" }
+                                        td class="val" { (invoice.payment.address.clone().unwrap()) }
+                                    }
+                                }
                             }
                         }
                     }

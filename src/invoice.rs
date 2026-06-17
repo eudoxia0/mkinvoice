@@ -84,6 +84,7 @@ pub struct Payment {
     pub acct: String,
     pub bank: String,
     pub swift: String,
+    pub address: Option<String>,
 }
 
 impl Labour {
@@ -188,6 +189,7 @@ mod tests {
                 acct: "12345678".to_string(),
                 bank: "Test Bank".to_string(),
                 swift: "TESTSWIFT".to_string(),
+                address: None,
             },
         }
     }
