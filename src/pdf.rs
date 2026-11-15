@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+use std::env::consts::OS;
 use std::path::Path;
 use std::path::PathBuf;
 use std::process::Command;
@@ -34,8 +35,15 @@ pub fn generate_pdf(invoice: &Invoice, output_path: &Path, show_total_hours: boo
     let html = render_html(invoice, show_total_hours).into_string();
     std::fs::write(&html_path, html)?;
 
+    // Path to the Chrome executable.
+    let chromium_path = if OS == "macos" {
+        "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
+    } else {
+        "chromium"
+    };
+
     // Run headless Chromium to generate PDF
-    let output = Command::new("chromium")
+    let output = Command::new(chromium_path)
         .arg("--headless")
         .arg("--run-all-compositor-stages-before-draw")
         .arg(format!("--print-to-pdf={}", output_path.display()))
